@@ -3,7 +3,7 @@
 	<Graphite>
 		<CarbonServer>SERVERNAME OR IP</CarbonServer>
 		<CarbonServerPort>8125</CarbonServerPort>
-		<MetricPath>laget.test.servers</MetricPath>
+		<MetricPath>laget.infra.servers</MetricPath>
 		<NodeHostName>$env:COMPUTERNAME</NodeHostName>
 		<MetricSendIntervalSeconds>10</MetricSendIntervalSeconds>
 		<SendUsingUDP>True</SendUsingUDP>
