@@ -70,7 +70,7 @@ function Send-BulkGraphiteMetrics
     if ($DateTime)
     {
         $utcDate = $DateTime.ToUniversalTime()
-        
+
         # Convert to a Unix time without any rounding
         [uint64]$UnixTime = [double]::Parse((Get-Date -Date $utcDate -UFormat %s))
     }
@@ -79,7 +79,7 @@ function Send-BulkGraphiteMetrics
     [string[]]$metricStrings = @()
     foreach ($key in $Metrics.Keys)
     {
-        $metricStrings += $key + " " + $Metrics[$key] + " " + $UnixTime
+        $metricStrings += $key + ":" + $Metrics[$key] + "|g" 
 
         Write-Verbose ("Metric Received: " + $metricStrings[-1])
     }

@@ -81,7 +81,7 @@ function Send-GraphiteMetric
     }
 
     # Create Send-To-Graphite Metric
-    $metric = $MetricPath + " " + $MetricValue + " " + $UnixTime
+    $metric = $MetricPath + ":" + $MetricValue + "|g"
 
     Write-Verbose "Metric Received: $metric"
 
