@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configuration>
 	<Graphite>
-		<CarbonServer>13.70.192.249</CarbonServer>
+		<CarbonServer>SERVERNAME OR IP</CarbonServer>
 		<CarbonServerPort>8125</CarbonServerPort>
 		<MetricPath>laget.test.servers</MetricPath>
 		<NodeHostName>$env:COMPUTERNAME</NodeHostName>
