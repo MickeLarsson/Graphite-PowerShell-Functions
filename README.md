@@ -1,6 +1,6 @@
 # Graphite PowerShell Functions
 
-A group of PowerShell functions that allow you to send Windows Performance counters to a Graphite Server, all configurable from a simple XML file.
+A group of PowerShell functions that allow you to send Windows Performance counters to a ~~Graphite~~ StatsD Server, all configurable from a simple XML file.
 
 [![GitHub Version](https://img.shields.io/github/release/MattHodge/Graphite-PowerShell-Functions.svg)](https://github.com/MattHodge/Graphite-PowerShell-Functions/releases)
 
@@ -8,19 +8,19 @@ More details at [http://www.hodgkins.net.au/mswindows/using-powershell-to-send-m
 
 ## Features
 
-* Sends Metrics to Graphite's Carbon daemon using TCP or UDP
+* Sends Metrics to ~~Graphite~~ StatsD's Carbon daemon using TCP or UDP
 * Can collect Windows Performance Counters
 * Can collect values by using T-SQL queries against MS SQL databases
 * Converts time to UTC on sending
 * All configuration can be done from a simple XML file
-* Allows you to override the hostname in Windows Performance Counters before sending on to Graphite
+* Allows you to override the hostname in Windows Performance Counters before sending on to ~~Graphite~~ StatsD
 * Allows renaming of metric names using regex via the configuration file
-* Reloads the XML configuration file automatically. For example, if more counters are added to the configuration file, the script will notice and start sending metrics for them to Graphite in the next send interval
-* Additional functions are exposed that allow you to send data to Graphite from PowerShell easily. [Here](#functions) is the list of included functions
+* Reloads the XML configuration file automatically. For example, if more counters are added to the configuration file, the script will notice and start sending metrics for them to ~~Graphite~~ StatsD in the next send interval
+* Additional functions are exposed that allow you to send data to ~~Graphite~~ StatsD from PowerShell easily. [Here](#functions) is the list of included functions
 * Script can be installed to run as a service
 * Installable by Chef Cookbook [which is available here](https://github.com/tas50/chef-graphite_powershell_functions/)
 * Installable by Puppet [which is available here](https://forge.puppetlabs.com/opentable/graphite_powershell)
-* Supports Hosted Graphite (https://www.hostedgraphite.com)
+~~* Supports Hosted Graphite (https://www.hostedgraphite.com)~~
 
 ## Installation
 
@@ -36,20 +36,20 @@ More details at [http://www.hodgkins.net.au/mswindows/using-powershell-to-send-m
 
 The configuration file is fairly self-explanatory, but here is a description for each of the values.
 
-#### <a name="config"></a>Graphite Configuration Section
+#### <a name="config"></a>~~Graphite~~ StatsD Configuration Section
 
 Configuration Name | Description
 --- | ---
-CarbonServer | The server name where Carbon is running. The Carbon daemon is usually running on the Graphite server.
+CarbonServer | The server name where Carbon is running. The Carbon daemon is usually running on the ~~Graphite~~ StatsD server.
 CarbonServerPort | The port number for Carbon. Its default port number is 2003.
 MetricPath | The path of the metric you want to be sent to the server. If you are using HostedGraphite, put your API key before the rest of the metric path, for example `YOUR-API-KEY.datacenter1.servers`.
-NodeHostName | This allows you to override the hostname of the server before sending the metrics on to Graphite. Default is use `$env:COMPUTERNAME`, which will use the local computer name.
-MetricSendIntervalSeconds | The interval to send metrics to Carbon; I recommend 5 seconds or greater. The more metrics you are collecting the longer it takes to send them to the Graphite server. You can see how long it takes to send the metrics each time the loop runs by using running the `Start-StatsToGraphite` function and having *VerboseOutput* set to *True*.
+NodeHostName | This allows you to override the hostname of the server before sending the metrics on to ~~Graphite~~ StatsD. Default is use `$env:COMPUTERNAME`, which will use the local computer name.
+MetricSendIntervalSeconds | The interval to send metrics to Carbon; I recommend 5 seconds or greater. The more metrics you are collecting the longer it takes to send them to the ~~Graphite~~ StatsD server. You can see how long it takes to send the metrics each time the loop runs by using running the `Start-StatsToGraphite` function and having *VerboseOutput* set to *True*.
 SendUsingUDP | Sends metrics via UDP instead of TCP.
 
 #### Performance Counters Configuration Section
 
-This section lists the performance counters you want the machine to send to Graphite. You can get these from Performance Monitor (perfmon.exe) or by using the command `typeperf -qx` in a command prompt.
+This section lists the performance counters you want the machine to send to ~~Graphite~~ StatsD. You can get these from Performance Monitor (perfmon.exe) or by using the command `typeperf -qx` in a command prompt.
 
 I have included some basic performance counters in the configuration file. Asterisks can be used as a wildcard.
 
@@ -62,7 +62,7 @@ Here are some other examples:
 
 #### MetricReplace Configuration Section
 
-This section lists regex find and replace rules used to clean up the Windows performance counters before sending them on to Graphite. Most people will be able to leave this section alone as it configured using sensible defaults.
+This section lists regex find and replace rules used to clean up the Windows performance counters before sending them on to ~~Graphite~~ StatsD. Most people will be able to leave this section alone as it configured using sensible defaults.
 
 The script processes these in the order they appear in the configuration file. **Order is important!**
 
@@ -88,7 +88,7 @@ This section allows you to configure the additional settings that will be used w
 Configuration Name | Description
 --- | ---
 MetricPath | The path of the SQL metric you want to be sent to the server
-MetricSendIntervalSeconds | The interval to send SQL metrics to Carbon. I recommend 5 seconds or greater. The more queries you are running the longer it takes to send them to the Graphite server. You can see how long it takes to send the metrics each time the loop runs by using running the `Start-SQLStatsToGraphite -Verbose -TestMode`.
+MetricSendIntervalSeconds | The interval to send SQL metrics to Carbon. I recommend 5 seconds or greater. The more queries you are running the longer it takes to send them to the ~~Graphite~~ StatsD server. You can see how long it takes to send the metrics each time the loop runs by using running the `Start-SQLStatsToGraphite -Verbose -TestMode`.
 SQLConnectionTimeoutSeconds | The time out period when attempting to connect to the SQL Server.
 SQLQueryTimeoutSeconds | The time out period when waiting for a SQL query to return.
 
@@ -105,14 +105,14 @@ The next part of the configuration allows you to add a list of the T-SQL queries
 `<Query>` Configuration Values | Description
 --- | ---
 Database | The database that the SQL query will be run against.
-MetricName | The Graphite metric name to use for this SQL query.
+MetricName | The ~~Graphite~~ StatsD metric name to use for this SQL query.
 TSQL | The T-SQL query to run against the SQL Server. If you need to use characters such as `<` or `>` in your query, you will need to replace them with the appropriate XML entity reference. For example, `>` would be replaced with `&gt;`. A full list of these can be found [on MSDN](http://msdn.microsoft.com/en-us/library/windows/desktop/dd892769%28v=vs.85%29.aspx).
 
 There are a few important things to keep in mind when using this feature.
 
 * If you provide the SQL **Username** and **Password** options, they is stored in plain text in the configuration file. If you do not provide a username and password, the windows account that the PowerShell window is running under will be used against the SQL Server. This is a good way to protect the credentials.
 * There is no verification that the SQL command in the configuration file is not destructive. Be sure to use a low privilege account to authenticate against SQL so that any malicious T-SQL queries don't destroy your data.
-* If your T-SQL query returns multiple results, only the first one will be sent over to Graphite.
+* If your T-SQL query returns multiple results, only the first one will be sent over to ~~Graphite~~ StatsD.
 
 #### Logging Configuration Section
 
@@ -124,7 +124,7 @@ VerboseOutput | Will provide each of the metrics that were sent over to Carbon a
 
 ## Usage - Windows Performance Counters
 
-The following shows how to use the `Start-StatsToGraphite`, which will collect Windows performance counters and send them to Graphite.
+The following shows how to use the `Start-StatsToGraphite`, which will collect Windows performance counters and send them to ~~Graphite~~ StatsD.
 
 1. Open PowerShell
 2. Import the Module by running `Import-Module -Name Graphite-PowerShell`
@@ -140,15 +140,15 @@ The below image is what `Start-StatsToGraphite` like with **VerboseOutput** turn
 
 ![alt text](http://i.imgur.com/G3pwnhf.jpg "Start-StatsToGraphite with Verbose Output")
 
-That is all there is to getting your Windows performance counters into Graphite.
+That is all there is to getting your Windows performance counters into ~~Graphite~~ StatsD.
 
 ## Usage - SQL Query Results
 
-The following shows how to use the `Start-SQLStatsToGraphite`, which will execute any SQL queries listed in the configuration file and send the result (which needs to be an integer) to Graphite.
+The following shows how to use the `Start-SQLStatsToGraphite`, which will execute any SQL queries listed in the configuration file and send the result (which needs to be an integer) to ~~Graphite~~ StatsD.
 
 1. Open PowerShell
 2. Import the Module by running `Import-Module -Name Graphite-PowerShell`
-3. Start the script by using the function `Start-SQLStatsToGraphite`. If you want Verbose detailed use `Start-SQLStatsToGraphite -Verbose`. If you want to see what would be sent to Graphite, without actually sending the metrics, use `Start-SQLStatsToGraphite -Verbose -TestMode`
+3. Start the script by using the function `Start-SQLStatsToGraphite`. If you want Verbose detailed use `Start-SQLStatsToGraphite -Verbose`. If you want to see what would be sent to ~~Graphite~~ StatsD, without actually sending the metrics, use `Start-SQLStatsToGraphite -Verbose -TestMode`
 
 The below image is what `Start-SQLStatsToGraphite` like with **VerboseOutput** turned on in the XML configuration file looks like.
 
@@ -173,7 +173,7 @@ The easiest way to achieve this is using NSSM - the Non-Sucking Service Manager.
 
 4. Click *Install Service*
 5. Make sure the service is started and it is set to Automatic
-6. Check your Graphite server and make sure the metrics are coming in
+6. Check your ~~Graphite~~ StatsD server and make sure the metrics are coming in
 
 The below configurations will show how to run either `Start-StatsToGraphite` or `Start-SQLStatsToGraphite` as a service. If you want to run both on the same server, you will need to create two seperate services, one for each script.
 
@@ -214,9 +214,9 @@ For a list of functions in the module, run `Get-Command -Module Graphite-PowerSh
 
 Function Name | Description
 --- | ---
-ConvertTo-GraphiteMetric | Takes the Windows Performance counter name and coverts it to something that Graphite can use.
-Send-BulkGraphiteMetrics | Sends several Graphite Metrics to a Carbon server with one request. Bulk requests save a lot of resources for Graphite server.
+ConvertTo-GraphiteMetric | Takes the Windows Performance counter name and coverts it to something that ~~Graphite~~ StatsD can use.
+Send-BulkGraphiteMetrics | Sends several ~~Graphite~~ StatsD Metrics to a Carbon server with one request. Bulk requests save a lot of resources for ~~Graphite~~ StatsD server.
 Send-GraphiteEvent | Sends an event to Graphite using the Graphite Event API. More information about the events API can be found [in this blog post](http://obfuscurity.com/2014/01/Graphite-Tip-A-Better-Way-to-Store-Events).
-Send-GraphiteMetric | Allows you to send metrics to Graphite in an ad-hoc manner.
-Start-SQLStatsToGraphite | The function to query SQL. This is an endless loop which will send metrics to Graphite.
-Start-StatsToGraphite | The function to collect Windows Performance Counters. This is an endless loop which will send metrics to Graphite.
+Send-GraphiteMetric | Allows you to send metrics to ~~Graphite~~ StatsD in an ad-hoc manner.
+Start-SQLStatsToGraphite | The function to query SQL. This is an endless loop which will send metrics to ~~Graphite~~ StatsD.
+Start-StatsToGraphite | The function to collect Windows Performance Counters. This is an endless loop which will send metrics to ~~Graphite~~ StatsD.
