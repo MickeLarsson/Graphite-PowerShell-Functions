@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configuration>
 	<Graphite>
-		<CarbonServer>yourCarbonServerNameOrIP</CarbonServer>
-		<CarbonServerPort>2003</CarbonServerPort>
-		<MetricPath>datacenter1.servers</MetricPath>
+		<CarbonServer>13.70.192.249</CarbonServer>
+		<CarbonServerPort>8125</CarbonServerPort>
+		<MetricPath>laget.test.servers</MetricPath>
 		<NodeHostName>$env:COMPUTERNAME</NodeHostName>
-		<MetricSendIntervalSeconds>5</MetricSendIntervalSeconds>
-		<SendUsingUDP>False</SendUsingUDP>
+		<MetricSendIntervalSeconds>10</MetricSendIntervalSeconds>
+		<SendUsingUDP>True</SendUsingUDP>
 	</Graphite>
 	<PerformanceCounters>
 		<Counter Name="\Network Interface(*)\Bytes Received/sec"/>
@@ -23,6 +23,8 @@
 		<Counter Name="\System\Threads"/>
 		<Counter Name="\PhysicalDisk(*)\Avg. Disk Write Queue Length"/>
 		<Counter Name="\PhysicalDisk(*)\Avg. Disk Read Queue Length"/>
+		<Counter Name="\LogicalDisk(*)\% Free Space"/>
+		<Counter Name="\LogicalDisk(*)\Free Megabytes"/>
 	</PerformanceCounters>
 	<MetricCleaning>
 		<!-- These will be found and replaced in the order they appear here -->
